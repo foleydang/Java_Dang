@@ -1,18 +1,18 @@
 # JAVA学习知识点
 相关新的基础知识，面试常问类型
 --------
-## [集合类](/集合类.md):smirk:smirk:smirk:smirk:smirk:smirk:smirk
+## [集合类](/集合类.md):smirk
 
 ****************
-## [多线程](/多线程.md):smirk:smirk:smirk:smirk:smirk:smirk
+## [多线程](/多线程.md):smirk
 ****************
-## [操作系统](/操作系统.md):smirk:smirk:smirk:smirk:smirk
+## [操作系统](/操作系统.md):smirk
 ****************
-## [Spring](/Spring.md):smirk:smirk:smirk:smirk
+## [Spring](/Spring.md):smirk
 ****************
-## [JVM虚拟机](/虚拟机.md):smirk:smirk:smirk
+## [JVM虚拟机](/虚拟机.md):smirk
 ****************
-## [算法](/算法.md):smirk:smirk
+## [算法](/算法.md):smirk:smirk:
 ****************
 ## [数据库知识](/数据库.md):smirk
 ****************
