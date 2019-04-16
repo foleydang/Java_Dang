@@ -5,10 +5,20 @@
 ****************
 集合顶层接口为单列集合Collection和双列集合Map
 Collection的实现有
-+ list 包含重复元素
-++ ArrsyList 线程不安全
-++ LinkedList 线程不安全
-++ vector 线程安全
++ List 包含重复元素
+  + ArrsyList 线程不安全
+  + LinkedList 线程不安全
+  + vector 线程安全
++ Set不包含重复元素
+  + HashSet 线程不安全
+  + LinkedHashSet 线程不安全，但保证插入顺序
+  + TreeSet 基于红黑树，线程不安全
+  Map的实现有
++ HashMap 线程不安全，初始容量为16，扩容为2倍，负载因子为0.75
+  + JDK1.7 基于数组+链表，添加元素为头插法，put后进行扩容时形成环链导致get陷入循环
+  + JDK1.8 基于数组+链表+红黑树，当链表长度达到8时，检测容量是否到64，若未到64则扩容，若大于64则转为红黑树，且添加元素为尾插法
++ TreeMap 基于红黑树，线程不安全
++ Hashtable 基于数据加链表结构，线程安全，头插法
 ## [多线程](/多线程.md)
 ****************
 :smirk:
