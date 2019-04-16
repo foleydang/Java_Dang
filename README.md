@@ -3,7 +3,12 @@
 --------
 ## [集合类](/集合类.md)
 ****************
-:smile:
+集合顶层接口为单列集合Collection和双列集合Map
+Collection的实现有
++ list 包含重复元素
+++ ArrsyList 线程不安全
+++ LinkedList 线程不安全
+++ vector 线程安全
 ## [多线程](/多线程.md)
 ****************
 :smirk:
