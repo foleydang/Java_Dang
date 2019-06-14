@@ -1,6 +1,6 @@
 ## 四张图带你了解Tomcat系统架构--让面试官颤抖的Tomcat回答系列！
 
-Tomcat的结构很复杂，但是 Tomcat 非常的模块化，找到了 Tomcat最核心的模块，问题才可以游刃而解，了解了Tomcat的整体架构对以后深入了解Tomcat来说至关重要！
+    Tomcat的结构很复杂，但是 Tomcat 非常的模块化，找到了 Tomcat最核心的模块，问题才可以游刃而解，了解了Tomcat的整体架构对以后深入了解Tomcat来说至关重要！
 
 ### 一、Tomcat顶层架构
 
@@ -35,9 +35,13 @@ Server标签设置的端口号为8005，shutdown=”SHUTDOWN” ，表示在8005
 ### 二、Tomcat顶层架构小结：
 
 （1）Tomcat中只有一个Server，一个Server可以有多个Service，一个Service可以有多个Connector和一个Container； 
+
 （2）Server掌管着整个Tomcat的生死大权； 
+
 （4）Service 是对外提供服务的； 
+
 （5）Connector用于接受请求并将请求封装成Request和Response来具体处理； 
+
 （6）Container用于封装和管理Servlet，以及具体处理request请求；
 
 知道了整个Tomcat顶层的分层架构和各个组件之间的关系以及作用，对于绝大多数的开发人员来说Server和Service对我们来说确实很远，而我们开发中绝大部分进行配置的内容是属于Connector和Container的，所以接下来介绍一下Connector和Container。
@@ -54,7 +58,13 @@ Connector用于接受请求并将请求封装成Request和Response，然后交�
 
 因此，我们可以把Connector分为四个方面进行理解：
 
-（1）Connector如何接受请求的？ （2）如何将请求封装成Request和Response的？ （3）封装完之后的Request和Response如何交给Container进行处理的？ （4）Container处理完之后如何交给Connector并返回给客户端的？
+（1）Connector如何接受请求的？ 
+
+（2）如何将请求封装成Request和Response的？ 
+
+（3）封装完之后的Request和Response如何交给Container进行处理的？ 
+
+（4）Container处理完之后如何交给Connector并返回给客户端的？
 
 首先看一下Connector的结构图（图B），如下所示：
 
@@ -79,7 +89,13 @@ Container用于封装和管理Servlet，以及具体处理Request请求，在Con
 
 4个子容器的作用分别是：
 
-（1）Engine：引擎，用来管理多个站点，一个Service最多只能有一个Engine； （2）Host：代表一个站点，也可以叫虚拟主机，通过配置Host就可以添加站点； （3）Context：代表一个应用程序，对应着平时开发的一套程序，或者一个WEB-INF目录以及下面的web.xml文件； （4）Wrapper：每一Wrapper封装着一个Servlet；
+（1）Engine：引擎，用来管理多个站点，一个Service最多只能有一个Engine； 
+
+（2）Host：代表一个站点，也可以叫虚拟主机，通过配置Host就可以添加站点；
+
+（3）Context：代表一个应用程序，对应着平时开发的一套程序，或者一个WEB-INF目录以及下面的web.xml文件； 
+
+（4）Wrapper：每一Wrapper封装着一个Servlet；
 
 下面找一个Tomcat的文件目录对照一下，如下图所示：
 
@@ -117,6 +133,6 @@ Pipeline的处理流程图如下（图D）：
 （3）当执行到StandardWrapperValve的时候，会在StandardWrapperValve中创建FilterChain，并调用其doFilter方法来处理请求，这个FilterChain包含着我们配置的与请求相匹配的Filter和Servlet，其doFilter方法会依次调用所有的Filter的doFilter方法和Servlet的service方法，这样请求就得到了处理！
 
 （4）当所有的Pipeline-Valve都执行完之后，并且处理完了具体的请求，这个时候就可以将返回的结果交给Connector了，Connector在通过Socket的方式将结果返回给客户端。
-总结
+### 总结
 
 至此，我们已经对Tomcat的整体架构有了大致的了解，从图A、B、C、D可以看出来每一个组件的基本要素和作用。我们在脑海里应该有一个大概的轮廓了！如果你面试的时候，让你简单的聊一下Tomcat，上面的内容你能脱口而出吗？当你能够脱口而出的时候，这位面试官一定会对你刮目相看的！
