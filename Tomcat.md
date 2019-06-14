@@ -1,6 +1,7 @@
 ## 四张图带你了解Tomcat系统架构--让面试官颤抖的Tomcat回答系列！
 
-    Tomcat的结构很复杂，但是 Tomcat 非常的模块化，找到了 Tomcat最核心的模块，问题才可以游刃而解，了解了Tomcat的整体架构对以后深入了解Tomcat来说至关重要！
+    Tomcat的结构很复杂，但是 Tomcat 非常的模块化，找到了 Tomcat最核心的模块，问题才可以游刃而解，
+    了解了Tomcat的整体架构对以后深入了解Tomcat来说至关重要！
 
 ### 一、Tomcat顶层架构
 
@@ -25,7 +26,7 @@ Service主要包含两个部分：Connector和Container。从上图中可以看�
 
 ![配置文件](./pic/16af28bb003b4591.png)
 
-详细的配置文件文件内容可以到Tomcat官网查看：tomcat.apache.org/tomcat-8.0-…
+详细的配置文件文件内容可以到Tomcat官网查看：http://tomcat.apache.org/
 
 上边的配置文件，还可以通过下边的一张结构图更清楚的理解：
 
@@ -103,7 +104,7 @@ Container用于封装和管理Servlet，以及具体处理Request请求，在Con
 
 Context和Host的区别是Context表示一个应用，我们的Tomcat中默认的配置下webapps下的每一个文件夹目录都是一个Context，其中ROOT目录中存放着主应用，其他目录存放着子应用，而整个webapps就是一个Host站点。
 
-我们访问应用Context的时候，如果是ROOT下的则直接使用域名就可以访问，例如：www.ledouit.com,如果是Host（webapps）下的其他应用，则可以使用www.ledouit.com/docs进行访问，当然默认指定的根应用（ROOT）是可以进行设定的，只不过Host站点下默认的主营用是ROOT目录下的。
+我们访问应用Context的时候，如果是ROOT下的则直接使用域名就可以访问，例如：www.ledouit.com, 如果是Host（webapps）下的其他应用，则可以使用www.ledouit.com/docs 进行访问，当然默认指定的根应用（ROOT）是可以进行设定的，只不过Host站点下默认的主营用是ROOT目录下的。
 
 看到这里我们知道Container是什么，但是还是不知道Container是如何进行处理的以及处理完之后是如何将处理完的结果返回给Connector的？别急！下边就开始探讨一下Container是如何进行处理的！
 ### 六、Container如何处理请求的
