@@ -1,3 +1,4 @@
+# 架构设计
 ## 四张图带你了解Tomcat系统架构--让面试官颤抖的Tomcat回答系列！
 
     Tomcat的结构很复杂，但是 Tomcat 非常的模块化，找到了 Tomcat最核心的模块，问题才可以游刃而解，
@@ -137,3 +138,61 @@ Pipeline的处理流程图如下（图D）：
 ### 总结
 
 至此，我们已经对Tomcat的整体架构有了大致的了解，从图A、B、C、D可以看出来每一个组件的基本要素和作用。我们在脑海里应该有一个大概的轮廓了！如果你面试的时候，让你简单的聊一下Tomcat，上面的内容你能脱口而出吗？当你能够脱口而出的时候，这位面试官一定会对你刮目相看的！
+# 运行模式
+
+两个接口的执行是否对应了2个线程？
+
+如果是这样，是否意味着容器每收到一个请求都会创建1个线程？
+
+有个显而易见的东西，某个request没执行完，也就是没返回response前系统是可以处理其它请求的。
+
+笔者想要确定出现这种情况时，是否是两个不同的线程在分别跑两个接口，想通过测试搞清楚，原理是在两个接口执行过程中把线程地址打出来，通过比较是否一样确定是否是2个线程，将原来的springMVC项目找到2个查询接口。在A接口中间某个程序段加上如下代码块
+``` logger.info("A1>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+Thread.currentThread());
+try {
+   Thread.sleep(new Long(10000));
+} catch (InterruptedException e) {
+   e.printStackTrace();
+}
+logger.info("A2>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+Thread.currentThread());复制代码在B接口中间某个程序段加上如下代码块logger.info("B1>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+Thread.currentThread());
+try {
+   Thread.sleep(new Long(10000));
+} catch (InterruptedException e) {
+   e.printStackTrace();
+}
+logger.info("B2>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+Thread.currentThread());复制代码然后写了2个测试类，用来模拟http请求，测试类1向A接口发请求，测试类2向B接口发请求使用tomcat启动项目，然后执行测试类1,间隔3秒左右启动测试类2,等待了几秒钟，测试类1，2都分别收到了回复，查看日志，发现打印顺序如下......
+A1>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Thread[http-apr-8090-exec-2,5,main]
+......
+B1>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Thread[http-apr-8090-exec-4,5,main]
+......
+A2>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Thread[http-apr-8090-exec-2,5,main]
+......
+B2>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Thread[http-apr-8090-exec-4,5,main]
+...... 
+```
+复制代码由打印日志不难发现，的确是2个线程那么能否据此推测说容器每接收到1个请求就会创建1个线程呢？
+
+答案是否定的以tomcat为例，暂不考虑其它容器，经过大量的资料查询，发现和tomcat的运行模式有关系，tomcat有3种运行模式，分别是
+
+#### bio模式    
+即每1个请求，tomcat都会创建1个线程，现在的tomcat基本都用线程池处理，类似数据库的连接池，提前创建好一定数量的连接，比起请求来了再创建省很多时间。很容易想到，如果并发量很大时，就会需要很多线程，内存肯定很容易溢出的。tomcat配置文件中的Connector节点下默认maxConnections=maxThreads,如果是bio模式，如果想要改变maxThreads(默认75),只需要配置maxThreads
+#### nio模式 
+maxConnections>maxThreads，即nio模式相对bio模式同等情况下减少了线程数，笔者的理解就是通过某种优化最大化压榨CPU，把时间片都更好利用起来，这里也说明了1个请求未必对应1个线程，之前做过netty项目其通讯就是nio模式,这里附上1篇高质量讲解NIO模式的文章：www.jianshu.com/p/76ff17bc6…,有兴趣可以看下
+
+#### apr 模式  
+和nio模式类似，主要区别在于处理静态资源的能力更强如何查看你的项目是什么运行模式？
+
+查看启动日志，会发现类似这样的东西：
+```信息: Initializing ProtocolHandler ["http-nio-8090"]
+四月 10, 2019 9:16:19 下午 org.apache.tomcat.util.net.NioSelectorPool getSharedSelector
+信息: Using a shared selector for servlet write/read
+四月 10, 2019 9:16:19 下午 org.apache.coyote.AbstractProtocol init
+信息: Initializing ProtocolHandler ["http-bio-8443"]
+```
+复制代码从日志看出，tomcat在8090端口以nio模式运行，8443端口以bio模式运行3种运行模式的适用情况：
+
+- bio方式基本被淘汰了     
+- nio方式适用于连接数多，连接时间短的架构，比如QQ，微信    
+- apr方式使用于连接数多,  连接时间长的架构，比如相册服务器，QQ空间相册 
+
+如果不指定，tomcat有默认的运行模式，7.0.30以后默认是apr模式
+
