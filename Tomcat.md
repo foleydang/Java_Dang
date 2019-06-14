@@ -6,7 +6,7 @@
 
 先上一张Tomcat的顶层结构图（图A），如下：
 
-![顶层结构](https://user-gold-cdn.xitu.io/2019/5/26/16af28bb20180a85?imageView2/0/w/1280/h/960/ignore-error/1)
+![顶层结构](./pic/16af28bb20180a85.png)
 
 
 Tomcat中最顶层的容器是Server，代表着整个服务器，从上图中可以看出，一个Server可以包含至少一个Service，用于具体提供服务。
