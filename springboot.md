@@ -1,6 +1,6 @@
-# **一、**Spring Boot 入门
+# 一、Spring Boot 入门
 
-> 让我们来称作springBoot这艘航母，来遨游J2EE整个世界。
+> 让我们来乘坐springBoot这艘航母，来遨游J2EE整个世界。
 
 伴随spring4.0发布的，是为了简化Spring应用开发的一个框架，约定大于配置，去繁就简，底层就是spring技术栈的一个大整合。使用spring framework进行ioc aop开发，使用spring data做数据访问，使用spring cloud进行分布式开发，spring security做安全权限控制。
 
